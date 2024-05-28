@@ -90,36 +90,6 @@ export const Actions = ({ data }: ActionsProps) => {
         <Trash className="h-4 w-4 mr-2" />
         Delete
       </Button>
-
-      {/* Move button */}
-      <Button
-        variant="gray"
-        className="w-full justify-start"
-        size="inline"
-      >
-        <Move className="h-4 w-4 mr-2" />
-        Move
-      </Button>
-
-      {/* Archive button */}
-      <Button
-        variant="gray"
-        className="w-full justify-start"
-        size="inline"
-      >
-        <Archive className="h-4 w-4 mr-2" />
-        Archive
-      </Button>
-
-      {/* Share Button */}
-      <Button
-        variant="gray"
-        className="w-full justify-start"
-        size="inline"
-      >
-        <Share className="h-4 w-4 mr-2" />
-        Share
-      </Button>
     </div>
   );
 };

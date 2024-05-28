@@ -43,7 +43,7 @@ const { title, id, boardId } = data;
             entityTitle: list.title,
             entityId: list.id,
             entityType: ENTITY_TYPE.LIST,
-            action: ACTION.CREATE,
+            action: ACTION.UPDATE,
           })
 
     } catch (error) {

@@ -13,7 +13,7 @@ export async function GET(req: Request, { params }: { params: { cardId: string }
     const card = await db.card.findUnique({
       where: {
         id: params.cardId,
-        list: {
+        list: { 
           board: {
             orgId,
           },

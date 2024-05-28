@@ -1,7 +1,8 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { AuditLog } from "@prisma/client";
-import { ActivityIcon } from "lucide-react";
+import { ActivityIcon, Link } from "lucide-react";
 import axios from "axios"; // Import axios for making HTTP requests
 import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
@@ -11,6 +12,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ActivityItem } from "@/components/activity-item";
 import { db } from "@/lib/db";
 
+// Define the Attachment interface
+interface Attachment {
+  id: number;
+  url: string;
+  displayText?: string | null;
+}
 
 interface ActivityProps {
   items: AuditLog[];
@@ -30,18 +37,24 @@ export const Activity = ({ items }: ActivityProps) => {
     EditorState.createEmpty()
   );
   const [comments, setComments] = useState<Comment[]>([]);
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [isCommentFocused, setIsCommentFocused] = useState(false); // State to track comment focus
-  console.log("comments", comments);
 
   const fetchComments = async () => {
+    await fetcher("/api/comments")
+      .then((res) => {
+        setComments(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
- 
-  
-
-
-    // await fetcher("/api/comments")
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
+  const fetchAttachments = async () => {
+    try {
+      const response = await api.get("/attachments");
+      setAttachments(response.data);
+    } catch (error) {
+      console.error("Error fetching attachments:", error);
+    }
   };
 
   const handleSaveComment = async () => {
@@ -59,8 +72,6 @@ export const Activity = ({ items }: ActivityProps) => {
 
       const response = await api.post("/comments", { comment: commentData });
 
-      console.log("Comment saved:", response.data);
-
       setEditorState(EditorState.createEmpty());
       fetchComments();
     } catch (error) {
@@ -75,10 +86,9 @@ export const Activity = ({ items }: ActivityProps) => {
   };
 
   useEffect(() => {
-    // Fetch comments when the component mounts
-
-    console.log("Mounted");
+    // Fetch comments and attachments when the component mounts
     fetchComments();
+    fetchAttachments();
   }, []);
 
   return (
@@ -121,6 +131,18 @@ export const Activity = ({ items }: ActivityProps) => {
         <ul className="mt-2 space-y-2">
           {comments.map((comment) => (
             <li key={comment.id}>{comment.text}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="w-full">
+        <ul className="mt-2 space-y-2">
+          {attachments.map((attachment) => (
+            <li key={attachment.id}>
+              <a href={attachment.url} target="_blank" rel="noopener noreferrer">
+                <Link size={16} className="mr-1" />
+                {attachment.displayText || attachment.url}
+              </a>
+            </li>
           ))}
         </ul>
       </div>

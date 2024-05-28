@@ -56,7 +56,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       entityTitle: list.title,
       entityId: list.id,
       entityType: ENTITY_TYPE.LIST,
-      action: ACTION.MOVE_LIST, // Custom action type for moving lists
+      action: ACTION.MOVE, // Custom action type for moving lists
     });
     
   } catch (error) {
